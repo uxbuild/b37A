@@ -2,11 +2,11 @@
 
 # data structure
 
-user > reviews (1-many) > user can write multiple reviews.
-user > Comments (1-many) > user can write multiple comments.
-product > reviews (1-many) > product can have multiple reviews.
-review > comments (1-many) > review can have multiple comments.
-foreign key (constraints): if user, product, review is deleted, related data cascades.
+- user > reviews (1-many) > user can write multiple reviews.
+- user > Comments (1-many) > user can write multiple comments.
+- product > reviews (1-many) > product can have multiple reviews.
+- review > comments (1-many) > review can have multiple comments.
+- foreign key (constraints): if user, product, review is deleted, related data cascades.
 
 # requirements
 

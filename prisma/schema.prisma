@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model
+- guest: browse and read reviews  (GET /api/products/:id/reviews)
+- guest: read details of reviewed item (GET api/products/:id)
+- guest: see average score (GET api/products/:id)
+- guest: see item info (GET api/products/:id)
+- guest: sign up (POST api/auth/register)
+- guest: login (POST api/auth/login) + (api/auth/me)
+
+- login user: create review (POST api/products/:id/reviews)
+- user: view list of all reviews have written (api/users/:id/reviews)
+- user: delete a review have written (DELETE api/users/:id/reviews/:id)
+- user: edit a review have written (PUT/PATCH api/users/:id/reviews/:id)
+- user: write comments on any review (POST api/products/:id/reviews/:id/comments)
+- user: view list of all comments have written (GET api/users/:id/comments)
+- user: edit comment have written (PUT api/users/:id/comments/:id)
+- user: delete comment have written (DELETE api/users/:id/comments/:id)

@@ -19,14 +19,14 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  reviews   Review[]
-  comments  Comment[]
+  reviews   Review[] @relation(onDelete: Cascade)  // Cascade delete reviews
+  comments  Comment[] @relation(onDelete: Cascade) // Cascade delete comments
 }
 
 model Item {
   id        Int      @id @default(autoincrement())
   name      String
-  reviews   Review[]
+  reviews   Review[] @relation(onDelete: Cascade) // Cascade delete reviews
 }
 
 model Comment {
@@ -37,8 +37,8 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments") // Define relation with name
-  user      User     @relation(fields: [userId], references: [id])
+  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments", onDelete: Cascade) // Cascade delete comments on review delete
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Cascade delete comments on user delete
 
   @@unique([userId, reviewId]) // Ensure one comment per user per review
 }
@@ -52,9 +52,9 @@ model Review {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  item      Item      @relation(fields: [itemId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
-  comments  Comment[] @relation("ReviewComments") // Ensure it matches the name in the Comment model
+  item      Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[] @relation("ReviewComments", onDelete: Cascade)
 
   @@unique([userId, itemId]) // Ensure a user can only leave one review per item
 }

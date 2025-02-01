@@ -6,7 +6,27 @@
 - user > Comments (1-many) > user can write multiple comments.
 - product > reviews (1-many) > product can have multiple reviews.
 - review > comments (1-many) > review can have multiple comments.
-- foreign key (constraints): if user, product, review is deleted, related data cascades.
+- foreign key (constraints): if user, product, review is deleted, related data CASCADE.
+
+# PUBLIC (guest) routes: login, register
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/me
+
+- GET /api/items (product)
+- GET /api/items/:id
+- GET /api/items/:id/reviews
+
+- GET /api/items/:id/reviews/:id
+- POST /api/items/:id/reviews
+- GET /api/reviews/me
+- PUT /api/reviews/:id
+
+- POST /api/items/:id/reviews/:id/comments
+- GET /api/comments/me
+- PUT / api/comments/:id
+- DELETE /api/comments/:id
+- DELETE /api/reviews/:id
 
 # requirements
 

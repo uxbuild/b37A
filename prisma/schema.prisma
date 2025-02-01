@@ -14,3 +14,47 @@ datasource db {
 }
 
 // model
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  reviews   Review[]
+  comments  Comment[]
+}
+
+model Item {
+  id        Int      @id @default(autoincrement())
+  name      String
+  reviews   Review[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  reviewId  Int
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments") // Define relation with name
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, reviewId]) // Ensure one comment per user per review
+}
+
+model Review {
+  id        Int       @id @default(autoincrement())
+  text      String
+  rating    Int
+  itemId    Int
+  userId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  item      Item      @relation(fields: [itemId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  comments  Comment[] @relation("ReviewComments") // Ensure it matches the name in the Comment model
+
+  @@unique([userId, itemId]) // Ensure a user can only leave one review per item
+}

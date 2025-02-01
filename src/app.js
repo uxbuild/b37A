@@ -1,37 +1,25 @@
-const path = require("path");
-const express = require("express");
-const morgan = require("morgan");
+// /src/app.js
+const express = require('express');
 const app = express();
-const jwt = require("jsonwebtoken");
+const authRoutes = require('./routes/authRoutes');
+const itemRoutes = require('./routes/itemRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
-// Logging middleware
-app.use(morgan("dev"));
-
-// Body parsing middleware
+// Middleware for parsing JSON bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Static file-serving middleware
-// app.use(express.static(path.join(__dirname, "..", "client/dist")));
+// Use the auth routes
+app.use('/api/auth', authRoutes);
 
-// home index route.
-app.get("/", (req, res) => {
-  res.json({ message: "store API - give it a go!" });
+// Use the item routes
+app.use('/api/items', itemRoutes);
+
+// Use the review routes
+app.use('/api', reviewRoutes);
+
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-// Backend routes
-// app.use("/auth", require("./auth"));
-// app.use("/api", require("./api"));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).send(err.message || "Internal server error.");
-});
-
-// Default to 404 if no other route matched
-app.use((req, res) => {
-  res.status(404).send("Not found.");
-});
-
-module.exports = app;

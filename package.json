@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "src/db/seed.js",
-    "dev": "JWT=JWT node --watch src/index",
+    "dev": "JWT=JWT node --watch src/server",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
     "db:test": "npx prisma migrate reset --force"

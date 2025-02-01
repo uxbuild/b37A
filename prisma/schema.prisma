@@ -14,19 +14,18 @@ datasource db {
 }
 
 // model
-
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  reviews   Review[] @relation(onDelete: Cascade)
-  comments  Comment[] @relation(onDelete: Cascade)
+  reviews   Review[] @relation("UserReviews")
+  comments  Comment[] @relation("UserComments")
 }
 
 model Item {
   id        Int      @id @default(autoincrement())
   name      String
-  reviews   Review[] @relation(onDelete: Cascade) // Cascade delete reviews
+  reviews   Review[] @relation("ItemReviews")
 }
 
 model Comment {
@@ -37,8 +36,8 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments", onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review    Review   @relation("ReviewComments", fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, reviewId]) // Ensure one comment per user per review
 }
@@ -52,9 +51,14 @@ model Review {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  item      Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments  Comment[] @relation("ReviewComments", onDelete: Cascade)
+  item      Item      @relation("ItemReviews", fields: [itemId], references: [id], onDelete: Cascade)
+  user      User      @relation("UserReviews", fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[] @relation("ReviewComments")
 
   @@unique([userId, itemId]) // Ensure a user can only leave one review per item
 }
+
+
+
+
+

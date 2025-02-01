@@ -15,9 +15,9 @@ router.get('/api/items/:itemId/reviews', reviewController.getReviewsByItem);
 router.get('/api/reviews/:reviewId', reviewController.getReviewById);
 
 // Route for updating a review
-router.put('/api/reviews/:reviewId', protect, checkOwnerShip, reviewController.updateReview);
+router.put('/api/reviews/:reviewId', protect, checkOwnerShip(Review), reviewController.updateReview);
 
 // Route for deleting a review
-router.delete('/api/reviews/:reviewId', protect, checkOwnerShip, reviewController.deleteReview);
+router.delete('/api/reviews/:reviewId', protect, checkOwnerShip(Review), reviewController.deleteReview);
 
 module.exports = router;

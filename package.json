@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "NODE_ENV=development node src/utils/seed.js",
-    "server": "node --watch src/server",
+    "dev": "nodemon src/server.js",
     "migrate": "npx prisma migrate dev",
     "generate": "npx prisma generate",
     "db:test": "npx prisma migrate reset --force"

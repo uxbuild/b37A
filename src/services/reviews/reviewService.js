@@ -1,6 +1,5 @@
 // services/reviewService.js
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaClient');
 
 // Create a new review for an item
 const createReview = async (userId, itemId, text, rating) => {

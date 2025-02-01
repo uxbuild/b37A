@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const authRoutes = require("./routes/auth/authRoutes");
 const userRoutes = require("./routes/user/userRoutes");
-const itemRoutes = require("./routes/itemRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
+const itemRoutes = require("./routes/items/itemRoutes");
+const reviewRoutes = require("./routes/reviews/reviewRoutes");
 
 // Middleware for parsing JSON bodies
 app.use(express.json());

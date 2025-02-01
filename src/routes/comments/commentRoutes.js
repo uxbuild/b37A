@@ -1,8 +1,8 @@
 // routes/commentRoutes.js
 const express = require('express');
 const router = express.Router();
-const commentController = require('../controllers/commentController');
-const { protect, checkOwnership } = require('../middleware/authMiddleware');
+const commentController = require('../../controllers/commentController');
+const { protect, checkOwnership } = require('../../middleware/authMiddleware');
 const { Comment } = require('@prisma/client');
 
 // Create a new comment

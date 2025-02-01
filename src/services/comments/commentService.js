@@ -1,6 +1,5 @@
 // services/commentService.js
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaClient');
 
 // Create a new comment on a review
 const createComment = async (userId, reviewId, text) => {

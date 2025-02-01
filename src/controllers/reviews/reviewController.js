@@ -1,12 +1,17 @@
 // controllers/reviewController.js
-const reviewService = require('../services/reviewService');
+const reviewService = require("../../services/reviews/reviewService");
 
 // Controller for creating a review
 const createReview = async (req, res) => {
   const { userId, itemId, text, rating } = req.body;
 
   try {
-    const review = await reviewService.createReview(userId, itemId, text, rating);
+    const review = await reviewService.createReview(
+      userId,
+      itemId,
+      text,
+      rating
+    );
     res.status(201).json(review); // Respond with the created review
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -32,7 +37,7 @@ const getReviewById = async (req, res) => {
   try {
     const review = await reviewService.getReviewById(reviewId);
     if (!review) {
-      return res.status(404).json({ message: 'Review not found' });
+      return res.status(404).json({ message: "Review not found" });
     }
     res.status(200).json(review);
   } catch (error) {
@@ -46,7 +51,11 @@ const updateReview = async (req, res) => {
   const { text, rating } = req.body;
 
   try {
-    const updatedReview = await reviewService.updateReview(reviewId, text, rating);
+    const updatedReview = await reviewService.updateReview(
+      reviewId,
+      text,
+      rating
+    );
     res.status(200).json(updatedReview);
   } catch (error) {
     res.status(400).json({ message: error.message });

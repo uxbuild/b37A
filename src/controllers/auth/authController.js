@@ -1,4 +1,4 @@
-// controllers/userController.js
+
 const authService = require('../../services/auth/authService');
 
 // Controller for user registration

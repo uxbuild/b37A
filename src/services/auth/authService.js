@@ -1,7 +1,7 @@
 // services/userService.js
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const prisma = require('../prisma/prismaClient');
+const prisma = require('../../../prisma/prismaClient');
 
 
 // Register a new user

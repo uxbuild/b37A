@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const reviewController = require("../../controllers/reviews/reviewController");
-const { protect, checkOwnerShip } = require("../../middleware/authMiddleware");
+const { protect, checkOwnership } = require("../../middleware/authMiddleware");
 const { Review } = require("@prisma/client");
 
 // Route for creating a review
@@ -22,7 +22,7 @@ router.get("/api/reviews/:reviewId", reviewController.getReviewById);
 router.put(
   "/api/reviews/:reviewId",
   protect,
-  checkOwnerShip(Review),
+  checkOwnership(Review),
   reviewController.updateReview
 );
 
@@ -30,7 +30,7 @@ router.put(
 router.delete(
   "/api/reviews/:reviewId",
   protect,
-  checkOwnerShip(Review),
+  checkOwnership(Review),
   reviewController.deleteReview
 );
 

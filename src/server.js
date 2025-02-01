@@ -5,10 +5,10 @@ const express = require("express");
 const morgan = require("morgan"); // HTTP request logger
 
 // Import route modules
-const authRoutes = require("./routes/authRoutes");
-const itemRoutes = require("./routes/itemRoutes");
-const reviewRoutes = require("./routes/reviewRoutes");
-const commentRoutes = require("./routes/commentRoutes");
+const authRoutes = require("./routes/auth/authRoutes");
+const itemRoutes = require("./routes/items/itemRoutes");
+const reviewRoutes = require("./routes/reviews/reviewRoutes");
+const commentRoutes = require("./routes/comments/commentRoutes");
 
 // App
 const app = express();

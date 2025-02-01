@@ -1,20 +1,20 @@
 // middleware/authMiddleware.js
-const jwt = require('jsonwebtoken');
+const { Review } = require('@prisma/client');  // Import Prisma Review model
 
-const protect = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');  // Assuming JWT is sent in the Authorization header
+// Middleware to check if the user is the owner of the review
+const checkOwnership = (model) => async (req, res, next) => {
+  const { userId } = req.user;  // Extract user ID from the JWT token
 
-  if (!token) {
-    return res.status(401).json({ message: 'No token, authorization denied' });
+  // Check if the review exists and belongs to the authenticated user
+  const review = await model.findUnique({
+    where: { id: req.params.reviewId },  // Get review by reviewId from the URL params
+  });
+
+  if (!review || review.userId !== userId) {
+    return res.status(403).json({ message: 'You are not authorized to perform this action' });
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;  // Store decoded user info in request object
-    next();  // Pass control to the next handler
-  } catch (err) {
-    res.status(401).json({ message: 'Invalid token' });
-  }
+  next();  // If ownership is verified, proceed to the next middleware/controller
 };
 
-module.exports = protect;
+module.exports = { protect, checkOwnership };

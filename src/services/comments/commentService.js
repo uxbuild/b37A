@@ -78,22 +78,10 @@ const deleteComment = async (commentId) => {
   }
 };
 
-// Delete all comments for a specific review (optional)
-const deleteCommentsByReview = async (reviewId) => {
-  try {
-    return await prisma.comment.deleteMany({
-      where: { reviewId },
-    });
-  } catch (error) {
-    throw new Error(error.message || 'Error deleting comments for review');
-  }
-};
-
 module.exports = {
   createComment,
   getCommentsByReview,
   getCommentsByUser,
   updateComment,
-  deleteComment,
-  deleteCommentsByReview,
+  deleteComment
 };

@@ -19,8 +19,8 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  reviews   Review[] @relation(onDelete: Cascade)  // Cascade delete reviews
-  comments  Comment[] @relation(onDelete: Cascade) // Cascade delete comments
+  reviews   Review[] @relation(onDelete: Cascade)
+  comments  Comment[] @relation(onDelete: Cascade)
 }
 
 model Item {
@@ -37,8 +37,8 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments", onDelete: Cascade) // Cascade delete comments on review delete
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Cascade delete comments on user delete
+  review    Review   @relation(fields: [reviewId], references: [id], name: "ReviewComments", onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, reviewId]) // Ensure one comment per user per review
 }

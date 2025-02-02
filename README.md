@@ -1,5 +1,16 @@
 # b37A
 
+# tasks:
+
+- model (define, migrate, generate client, update)
+- routes, controllers, services (user, item, review, comment)
+- seed
+- api test
+
+# issues/TODO
+
+- seed new fields: item (firstName, lastName)
+
 # data structure
 
 - user > reviews (1-many) > user can write multiple reviews.

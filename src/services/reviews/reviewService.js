@@ -89,11 +89,11 @@ const updateAvgRating = async (itemId) => {
   // calculate new average rating
   const avgRating =
     reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length || 0;
-
+    const rounded = Math.round(avgRating);
   // update average rating
   return await prisma.item.update({
     where: { id: itemId },
-    data: { avgRating },
+    data: { rounded },
   });
 };
 

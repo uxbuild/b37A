@@ -12,6 +12,10 @@ const createReview = async (req, res) => {
       text,
       rating
     );
+
+    // update average rating
+    await reviewService.updateAvgRating(itemId);
+
     res.status(201).json(review); // Respond with the created review
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -56,6 +60,10 @@ const updateReview = async (req, res) => {
       text,
       rating
     );
+
+    // update average rating
+    await reviewService.updateAvgRating(itemId);
+
     res.status(200).json(updatedReview);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -67,7 +75,12 @@ const deleteReview = async (req, res) => {
   const { reviewId } = req.params;
 
   try {
+    // delete
     const deletedReview = await reviewService.deleteReview(reviewId);
+
+    // update average rating
+    await reviewService.updateAvgRating(itemId);
+
     res.status(200).json(deletedReview);
   } catch (error) {
     res.status(400).json({ message: error.message });

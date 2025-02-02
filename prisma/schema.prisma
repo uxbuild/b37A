@@ -16,30 +16,33 @@ datasource db {
 // model
 model User {
   id        Int      @id @default(autoincrement())
+
+  firstName String @default("Unknown")
+  lastName String @default("Unknown")
+
   email     String   @unique
   password  String
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+
   reviews   Review[] @relation("UserReviews")
   comments  Comment[] @relation("UserComments")
 }
 
 model Item {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String @default("Unknown")
+
+  description String @default("Lorem ipso facto, carpe diem, deus ex machina")
+  price Float @default(0)
+  avgRating Float @default(0)
+  
+  createdAt DateTime  @default(now())
+  // compensate for existing record which does not have this field during migrate..
+  updatedAt DateTime @updatedAt @default(now())
+
   reviews   Review[] @relation("ItemReviews")
-}
-
-model Comment {
-  id        Int      @id @default(autoincrement())
-  text      String
-  reviewId  Int
-  userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  review    Review   @relation("ReviewComments", fields: [reviewId], references: [id], onDelete: Cascade)
-  user      User     @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, reviewId]) // Ensure one comment per user per review
 }
 
 model Review {
@@ -48,8 +51,9 @@ model Review {
   rating    Int
   itemId    Int
   userId    Int
+  
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
 
   item      Item      @relation("ItemReviews", fields: [itemId], references: [id], onDelete: Cascade)
   user      User      @relation("UserReviews", fields: [userId], references: [id], onDelete: Cascade)
@@ -57,6 +61,21 @@ model Review {
 
   @@unique([userId, itemId]) // Ensure a user can only leave one review per item
 }
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  reviewId  Int
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+
+  review    Review   @relation("ReviewComments", fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserComments", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId]) // Ensure one comment per user per review
+}
+
 
 
 

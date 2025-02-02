@@ -69,16 +69,32 @@ const updateReview = async (reviewId, text, rating) => {
   }
 };
 
-// Delete a review and its associated comments (optional cascade)
+// delete review
 const deleteReview = async (reviewId) => {
   try {
     return await prisma.review.delete({
       where: { id: reviewId },
-      include: { comments: true },  // Optionally include comments for deletion
     });
   } catch (error) {
     throw new Error(error.message || 'Error deleting review');
   }
+};
+
+const updateAvgRating = async (itemId) => {
+  // get all reviews
+  const reviews = await prisma.review.findMany({
+    where: { itemId },
+  });
+
+  // calculate new average rating
+  const avgRating =
+    reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length || 0;
+
+  // update average rating
+  return await prisma.item.update({
+    where: { id: itemId },
+    data: { avgRating },
+  });
 };
 
 module.exports = {
@@ -87,4 +103,6 @@ module.exports = {
   getReviewById,
   updateReview,
   deleteReview,
+  updateAvgRating,
+
 };

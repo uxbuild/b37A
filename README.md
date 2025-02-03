@@ -13,12 +13,12 @@
 
 # tasks:
 
-- route: GET items/id/reviews/id/comments
+- GET items/id/reviews/id/
+- GET items/id/reviews/id/comments
 - etc.
 
 # issues/TODO
 
-- seed new fields: item (firstName, lastName)
 
 # data structure
 

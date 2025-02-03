@@ -106,29 +106,67 @@ const getItemReviews = async (itemId) => {
 };
 
 const addReviewByItemId = async (itemId, { text, rating, userId }) => {
-    // Check if the item exists
-    const item = await prisma.item.findUnique({
-      where: { id: Number(itemId) },
-    });
-  
-    if (!item) {
-      throw new Error("Item not found.");
-    }
-  
-    // Create the review
-    const review = await prisma.review.create({
-      data: {
-        text,
-        rating,
-        itemId: Number(itemId),
-        userId: Number(userId),
+  // Check if the item exists
+  const item = await prisma.item.findUnique({
+    where: { id: Number(itemId) },
+  });
+
+  if (!item) {
+    throw new Error("Item not found.");
+  }
+
+  // Create the review
+  const review = await prisma.review.create({
+    data: {
+      text,
+      rating,
+      itemId: Number(itemId),
+      userId: Number(userId),
+    },
+  });
+
+  // Update the item's average rating
+  await updateAvgRating(itemId);
+
+  return review;
+};
+
+const getItemReviewById = async (reviewId) => {
+  console.log("**************");
+  console.log("items service: getItemReviewById", reviewId);
+
+  try {
+    const review = await prisma.review.findUnique({
+      // what is standard practice for handling numeric IDs..
+      where: { id: Number(reviewId) },
+      // For unprotected routed, which fields should be display and hidden..??
+      select: {
+        id: true,
+        text: true,
+        rating: true,
+        createdAt: true,
+        updatedAt: true,
+        itemId: true,
       },
     });
-  
-    // Update the item's average rating
-    await updateAvgRating(itemId);
-  
+    
+    // review not found
+    if (!review) {
+        throw new Error("Item review not found.");
+    }
+    console.log('review by id found', review);
     return review;
-  };
 
-module.exports = { getAllItems, getItemById, getItemReviews, addReviewByItemId };
+  } catch (error) {
+    // get error specifics..
+    throw new Error(`Error retrieving item review: ${error.message}`);
+  }
+};
+
+module.exports = {
+  getAllItems,
+  getItemById,
+  getItemReviews,
+  addReviewByItemId,
+  getItemReviewById,
+};

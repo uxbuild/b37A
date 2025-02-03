@@ -38,18 +38,16 @@ const getItemReviews = async (req, res) => {
   }
 };
 
-
-// TODO..
 // -----------------------
 const getItemReviewById = async (req, res) => {
   try {
-    const { reviewId } = req.params;
-    const review = await itemService.getItemReviewById(reviewId);
+    const { itemId, reviewId } = req.params;
+    const review = await itemService.getItemReviewById(itemId, reviewId);
     res.status(200).json(review);
   } catch (error) {
-    res.status(500).json({error: error.message});
+    res.status(500).json({ error: error.message });
   }
-}
+};
 
 // -----------------------
 const addReviewByItemId = async (req, res) => {
@@ -58,7 +56,11 @@ const addReviewByItemId = async (req, res) => {
 
   try {
     // Call the service to handle the logic for adding a review
-    const review = await itemService.addReview(itemId, { text, rating, userId });
+    const review = await itemService.addReview(itemId, {
+      text,
+      rating,
+      userId,
+    });
     // Return the new review as response
     return res.status(201).json(review);
   } catch (error) {
@@ -66,5 +68,22 @@ const addReviewByItemId = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+// -----------------------
+const getCommentsByReviewId = async (req, res) => {
+  const { itemId, reviewId } = req.params;
+  try {
+    const comments = await itemService.getCommentsByReviewId(itemId, reviewId);
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-module.exports = { getAllItems, getItemById, getItemReviews, addReviewByItemId, getItemReviewById };
+module.exports = {
+  getAllItems,
+  getItemById,
+  getItemReviews,
+  addReviewByItemId,
+  getItemReviewById,
+  getCommentsByReviewId,
+};

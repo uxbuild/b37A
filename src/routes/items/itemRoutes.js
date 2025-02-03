@@ -2,13 +2,16 @@ const express = require("express");
 const router = express.Router();
 const itemController = require("../../controllers/items/itemController");
 
-// Placeholder route to get all items
+// GET all items
 router.get("/", itemController.getAllItems);
 
-// Placeholder route to get a specific item by its ID
+// GET item by id
 router.get("/:itemId", itemController.getItemById);
 
-// Placeholder route to get reviews for a specific item by its ID
+// GET all review of an item
 router.get("/:itemId/reviews", itemController.getItemReviews);
+
+// POST create a review for an item
+router.post("/:itemId/reviews", itemController.addReviewByItemId);
 
 module.exports = router;

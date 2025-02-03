@@ -1,6 +1,7 @@
-//imports
-
+// environment variables (.env)
 require("dotenv").config();
+
+//imports
 const express = require("express");
 const morgan = require("morgan"); // HTTP request logger
 

@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 const prisma = require('../../../prisma/prismaClient');
 
 
-// Register a new user
-const registerUser = async (email, password) => {
+// REGISTER
+const registerUser = async (email, password, firstName, lastName) => {
+  console.log('api auth register service', `${email}, ${password}`);
+  
   try {
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -24,6 +26,8 @@ const registerUser = async (email, password) => {
       data: {
         email,
         password: hashedPassword,
+        firstName: firstName,
+        lastName: lastName,
       },
     });
   } catch (error) {
@@ -31,7 +35,7 @@ const registerUser = async (email, password) => {
   }
 };
 
-// Authenticate a user (Login)
+// LOGIN
 const authenticateUser = async (email, password) => {
   try {
     // Find user by email
@@ -53,8 +57,8 @@ const authenticateUser = async (email, password) => {
     // Generate JWT token
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,  // Store this in an environment variable
-      { expiresIn: '1h' }      // Token expires in 1 hour
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
     );
 
     return { token, user };
@@ -63,7 +67,34 @@ const authenticateUser = async (email, password) => {
   }
 };
 
+// GET USER DATA
+const getMe = async (userId) => {
+  try {
+    // Fetch the user from the database using their ID
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message || 'Error fetching user details');
+  }
+};
+
 module.exports = {
   registerUser,
   authenticateUser,
+  getMe
 };

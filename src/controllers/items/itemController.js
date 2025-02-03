@@ -38,4 +38,21 @@ const getItemReviews = async (req, res) => {
   }
 };
 
-module.exports = { getAllItems, getItemById, getItemReviews };
+// TODO..
+const addReviewByItemId = async (req, res) => {
+  const { itemId } = req.params; // Item ID from the URL
+  const { text, rating, userId } = req.body; // Review data from request body
+
+  try {
+    // Call the service to handle the logic for adding a review
+    const review = await itemService.addReview(itemId, { text, rating, userId });
+
+    // Return the new review as response
+    return res.status(201).json(review);
+  } catch (error) {
+    // Return error if any occurs
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { getAllItems, getItemById, getItemReviews, addReviewByItemId };

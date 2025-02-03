@@ -5,17 +5,17 @@ const reviewController = require("../../controllers/reviews/reviewController");
 const { protect, checkOwnership } = require("../../middleware/authMiddleware");
 const { Review } = require("@prisma/client");
 
-// Route for creating a review
+// CREATE a review
 router.post(
   "/api/items/:itemId/reviews",
   protect,
   reviewController.createReview
 );
 
-// Route for getting reviews by item
+// GET reviews by item DONE
 router.get("/api/items/:itemId/reviews", reviewController.getReviewsByItem);
 
-// Route for getting a specific review by ID
+// GET specific review by ID
 router.get("/api/reviews/:reviewId", reviewController.getReviewById);
 
 // Route for updating a review

@@ -105,4 +105,30 @@ const getItemReviews = async (itemId) => {
   }
 };
 
-module.exports = { getAllItems, getItemById, getItemReviews };
+const addReviewByItemId = async (itemId, { text, rating, userId }) => {
+    // Check if the item exists
+    const item = await prisma.item.findUnique({
+      where: { id: Number(itemId) },
+    });
+  
+    if (!item) {
+      throw new Error("Item not found.");
+    }
+  
+    // Create the review
+    const review = await prisma.review.create({
+      data: {
+        text,
+        rating,
+        itemId: Number(itemId),
+        userId: Number(userId),
+      },
+    });
+  
+    // Update the item's average rating
+    await updateAvgRating(itemId);
+  
+    return review;
+  };
+
+module.exports = { getAllItems, getItemById, getItemReviews, addReviewByItemId };

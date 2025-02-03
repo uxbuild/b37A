@@ -17,5 +17,8 @@ router.post("/:itemId/reviews", itemController.addReviewByItemId);
 // GET review by id from item reviews
 router.get("/:itemId/reviews/:reviewId", itemController.getItemReviewById);
 
+// GET all comments of item review by id
+router.get('/:itemId/reviews/:reviewId/comments', itemController.getCommentsByReviewId);
+
 
 module.exports = router;

@@ -13,11 +13,14 @@
 - GET items/id
 - GET items/id/reviews
 - GET items/id/reviews/id
+- GET items/id/reviews/id/comments
+
+# in progress
+
+- POST /api/items/:itemId/reviews
 
 # tasks:
 
-- GET items/id/reviews/id/comments
-- POST /api/items/:itemId/reviews
 - GET /api/reviews/me
 - PUT /api/users/:userId/reviews/:reviewId
 - POST /api/items/:itemId/reviews/:reviewId/comments

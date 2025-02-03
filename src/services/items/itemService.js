@@ -1,6 +1,7 @@
 // imports..
 const prisma = require("../../../prisma/prismaClient");
 
+// --------------------------
 // Get all items..
 const getAllItems = async () => {
   try {
@@ -37,6 +38,7 @@ const getAllItems = async () => {
   }
 };
 
+// --------------------------
 // Get item by id
 const getItemById = async (itemId) => {
   console.log("***");
@@ -78,20 +80,14 @@ const getItemById = async (itemId) => {
   }
 };
 
+// --------------------------
 // Get reviews by item id
 const getItemReviews = async (itemId) => {
   console.log("getItemReviews, itemId", itemId);
 
   try {
-    // Ensure itemId is a number (in case it's passed as a string)
-    const parsedItemId = Number(itemId);
-
-    if (isNaN(parsedItemId)) {
-      throw new Error("Invalid itemId format.");
-    }
-
     return await prisma.review.findMany({
-      where: { itemId: parsedItemId }, // Use parsedItemId as a number
+      where: { itemId: Number(itemId) }, // Use parsedItemId as a number
       select: {
         id: true,
         text: true,
@@ -105,6 +101,7 @@ const getItemReviews = async (itemId) => {
   }
 };
 
+// --------------------------
 const addReviewByItemId = async (itemId, { text, rating, userId }) => {
   // Check if the item exists
   const item = await prisma.item.findUnique({
@@ -115,6 +112,7 @@ const addReviewByItemId = async (itemId, { text, rating, userId }) => {
     throw new Error("Item not found.");
   }
 
+  // --------------------------
   // Create the review
   const review = await prisma.review.create({
     data: {
@@ -131,14 +129,18 @@ const addReviewByItemId = async (itemId, { text, rating, userId }) => {
   return review;
 };
 
-const getItemReviewById = async (reviewId) => {
+// --------------------------
+const getItemReviewById = async (itemId, reviewId) => {
   console.log("**************");
-  console.log("items service: getItemReviewById", reviewId);
+  console.log(`items service: getItemReviewById: ${itemId}, ${reviewId}`);
 
   try {
     const review = await prisma.review.findUnique({
       // what is standard practice for handling numeric IDs..
-      where: { id: Number(reviewId) },
+      where: {
+        id: Number(reviewId),
+        itemId: Number(itemId),
+      },
       // For unprotected routed, which fields should be display and hidden..??
       select: {
         id: true,
@@ -149,17 +151,36 @@ const getItemReviewById = async (reviewId) => {
         itemId: true,
       },
     });
-    
+
     // review not found
     if (!review) {
-        throw new Error("Item review not found.");
+      throw new Error("Item review not found.");
     }
-    console.log('review by id found', review);
+    console.log("review by id found", review);
     return review;
-
   } catch (error) {
     // get error specifics..
     throw new Error(`Error retrieving item review: ${error.message}`);
+  }
+};
+// --------------------------
+// GET api/items/:id/reviews/:id/comments
+// Is it necessary to validate that the comment belong to the item if it already belongs to the review on that item.
+const getCommentsByReviewId = async (itemId, reviewId) => {
+  try {
+    return await prisma.comment.findMany({
+      where: {
+        reviewId: Number(reviewId),
+        // itemId: itemId,
+      },
+      select: {
+        id: true,
+        text: true,
+        reviewId: true,
+      },
+    });
+  } catch (error) {
+    throw new Error(`Error retrieving comments by review id: ${error.message}`);
   }
 };
 
@@ -169,4 +190,5 @@ module.exports = {
   getItemReviews,
   addReviewByItemId,
   getItemReviewById,
+  getCommentsByReviewId,
 };

@@ -1,11 +1,20 @@
 # b37A
 
+# completions
+- model (schema)
+- structure, middleware
+- seed
+- route: auth Register
+- route: auth Login
+- route: auth me (protected) token verification
+- route: GET items
+- route: GET items/id
+- route: GET items/id/reviews
+
 # tasks:
 
-- model (define, migrate, generate client, update)
-- routes, controllers, services (user, item, review, comment)
-- seed
-- api test
+- route: GET items/id/reviews/id/comments
+- etc.
 
 # issues/TODO
 

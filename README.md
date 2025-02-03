@@ -1,21 +1,30 @@
 # b37A
 
 # completions
+
 - model (schema)
 - structure, middleware
 - seed
-- route: auth Register
-- route: auth Login
-- route: auth me (protected) token verification
-- route: GET items
-- route: GET items/id
-- route: GET items/id/reviews
+
+- POST auth register
+- POST auth login
+- GET auth me (protected) token verification
+- GET items
+- GET items/id
+- GET items/id/reviews
+- GET items/id/reviews/id
 
 # tasks:
 
-- GET items/id/reviews/id/
 - GET items/id/reviews/id/comments
-- etc.
+- POST /api/items/:itemId/reviews
+- GET /api/reviews/me
+- PUT /api/users/:userId/reviews/:reviewId
+- POST /api/items/:itemId/reviews/:reviewId/comments
+- GET /api/comments/me
+- PUT /api/users/:userId/comments/:commentId
+- DELETE /api/users/:userId/comments/:commentId
+- DELETE /api/users/:userId/reviews/:reviewId
 
 # issues/TODO
 

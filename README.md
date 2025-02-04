@@ -14,14 +14,14 @@
 - GET items/id/reviews
 - GET items/id/reviews/id
 - GET items/id/reviews/id/comments
+- POST /api/items/:itemId/reviews
 
 # in progress
 
-- POST /api/items/:itemId/reviews
+- GET /api/reviews/me PROTECTED = view my reviews
 
 # tasks:
 
-- GET /api/reviews/me PROTECTED = view my reviews
 - PUT /api/users/:userId/reviews/:reviewId PROTECTED = edit my review
 - POST /api/items/:itemId/reviews/:reviewId/comments
 - GET /api/comments/me PROTECTED = get my comments

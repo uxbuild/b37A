@@ -50,25 +50,6 @@ const getItemReviewById = async (req, res) => {
 };
 
 // -----------------------
-const addReviewByItemId = async (req, res) => {
-  const { itemId } = req.params; // Item ID from the URL
-  const { text, rating, userId } = req.body; // Review data from request body
-
-  try {
-    // Call the service to handle the logic for adding a review
-    const review = await itemService.addReview(itemId, {
-      text,
-      rating,
-      userId,
-    });
-    // Return the new review as response
-    return res.status(201).json(review);
-  } catch (error) {
-    // Return error if any occurs
-    return res.status(500).json({ error: error.message });
-  }
-};
-// -----------------------
 const getCommentsByReviewId = async (req, res) => {
   const { itemId, reviewId } = req.params;
   try {
@@ -79,11 +60,31 @@ const getCommentsByReviewId = async (req, res) => {
   }
 };
 
+// -----------------------
+// POST add review
+const addReview = async (req, res) => {
+  const { itemId } = req.params;
+  const { text, rating } = req.body;
+  const { userId } = req.user;
+
+  if (!text || !rating) {
+    return res.status(400).json({ message: "Text and rating are required" });
+  }
+
+  try {
+    const review = await itemService.addReview(itemId, text, rating, userId);
+    return res.status(201).json(review);
+
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllItems,
   getItemById,
   getItemReviews,
-  addReviewByItemId,
   getItemReviewById,
   getCommentsByReviewId,
+  addReview,
 };

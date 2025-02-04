@@ -102,34 +102,6 @@ const getItemReviews = async (itemId) => {
 };
 
 // --------------------------
-const addReviewByItemId = async (itemId, { text, rating, userId }) => {
-  // Check if the item exists
-  const item = await prisma.item.findUnique({
-    where: { id: Number(itemId) },
-  });
-
-  if (!item) {
-    throw new Error("Item not found.");
-  }
-
-  // --------------------------
-  // Create the review
-  const review = await prisma.review.create({
-    data: {
-      text,
-      rating,
-      itemId: Number(itemId),
-      userId: Number(userId),
-    },
-  });
-
-  // Update the item's average rating
-  await updateAvgRating(itemId);
-
-  return review;
-};
-
-// --------------------------
 const getItemReviewById = async (itemId, reviewId) => {
   console.log("**************");
   console.log(`items service: getItemReviewById: ${itemId}, ${reviewId}`);
@@ -184,11 +156,69 @@ const getCommentsByReviewId = async (itemId, reviewId) => {
   }
 };
 
+// --------------------------
+const addReview = async (itemId, text, rating, userId) => {
+    console.log('item service addReview', `itemId: ${itemId}, text: ${text}, rating: ${rating}`);
+    
+  try {
+    // get item..
+    const item = await prisma.item.findUnique({
+      where: { id: Number(itemId) },
+    });
+
+    console.log('item found', item);
+    
+    // if not found..
+    if (!item) {
+      throw new Error("Item not found.");
+    }
+
+    // Create the review
+    const review = await prisma.review.create({
+      data: {
+        text,
+        rating,
+        itemId: Number(itemId),
+        userId: Number(userId),
+      },
+    });
+
+    
+    // get new average rating..
+    const avgRating = await getAvgRating(review.itemId);
+
+    // update item with average rating..
+    await prisma.item.update({
+      where: { id: review.itemId },
+      data: { avgRating: avgRating },
+    });
+
+    return review;
+  } catch (error) {
+    throw new Error("Error adding review: " + error.message);
+  }
+};
+// ----------------
+// Helper function to calculate the average rating
+const getAvgRating = async (itemId) => {
+  const reviews = await prisma.review.findMany({
+    where: { itemId: Number(itemId) }, // Get all reviews for the item
+  });
+
+  if (reviews.length === 0) return 0; // If no reviews, return 0
+
+  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  const avgRating = totalRating / reviews.length;
+
+  return avgRating;
+};
+// --------------------
+
 module.exports = {
   getAllItems,
   getItemById,
   getItemReviews,
-  addReviewByItemId,
   getItemReviewById,
   getCommentsByReviewId,
+  addReview,
 };

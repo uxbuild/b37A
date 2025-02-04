@@ -21,13 +21,13 @@
 
 # tasks:
 
-- GET /api/reviews/me
-- PUT /api/users/:userId/reviews/:reviewId
+- GET /api/reviews/me PROTECTED = view my reviews
+- PUT /api/users/:userId/reviews/:reviewId PROTECTED = edit my review
 - POST /api/items/:itemId/reviews/:reviewId/comments
-- GET /api/comments/me
-- PUT /api/users/:userId/comments/:commentId
-- DELETE /api/users/:userId/comments/:commentId
-- DELETE /api/users/:userId/reviews/:reviewId
+- GET /api/comments/me PROTECTED = get my comments
+- PUT /api/users/:userId/comments/:commentId PROTECTED = edit my comment
+- DELETE /api/users/:userId/comments/:commentId PROTECTED = delete my comment
+- DELETE /api/users/:userId/reviews/:reviewId PROTECTED = delete my review
 
 # issues/TODO
 

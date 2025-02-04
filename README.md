@@ -20,7 +20,7 @@
 
 - GET /api/reviews/me PROTECTED = view my reviews
 
-# tasks:
+# tasks TODO:
 
 - PUT /api/users/:userId/reviews/:reviewId PROTECTED = edit my review
 - POST /api/items/:itemId/reviews/:reviewId/comments
@@ -28,9 +28,6 @@
 - PUT /api/users/:userId/comments/:commentId PROTECTED = edit my comment
 - DELETE /api/users/:userId/comments/:commentId PROTECTED = delete my comment
 - DELETE /api/users/:userId/reviews/:reviewId PROTECTED = delete my review
-
-# issues/TODO
-
 
 # data structure
 

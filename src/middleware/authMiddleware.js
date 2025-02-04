@@ -37,8 +37,9 @@ const protect = async (req, res, next) => {
 
 // Generalized ownership check for any model
 const checkOwnership = (model) => async (req, res, next) => {
-  // Get userId from authenticated req.user
-  const { userId } = req.user;
+  
+  // get user id
+  const { userId } = req.user.id;
 
   // Find model instance by unique ID (e.g., reviewId, commentId)
   const item = await model.findUnique({

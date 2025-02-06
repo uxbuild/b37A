@@ -66,7 +66,7 @@ const deleteComment = async (req, res) => {
     res.status(200).json({
       message: "Comment deleted successfuly.",
       deletedComment,
-    })
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

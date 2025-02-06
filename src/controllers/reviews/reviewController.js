@@ -94,7 +94,10 @@ const deleteReview = async (req, res) => {
     // update average rating
     await reviewService.updateAvgRating(deletedReview.itemId);
 
-    res.status(200).json(deletedReview);
+    res.status(200).json({
+      message: "Review deleted successfuly.",
+      deletedReview,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -104,7 +107,7 @@ const deleteReview = async (req, res) => {
 // get all my reviews..
 const getMyReviews = async (req, res) => {
   console.log("***********************");
-  console.log("review controller getMyReviews", req.user.id);
+  console.log("review controller getMyReviews", req.user.userId);
 
   try {
     const userId = req.user.userId;

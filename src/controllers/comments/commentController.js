@@ -56,7 +56,7 @@ const updateComment = async (req, res) => {
   }
 };
 
-// Controller for deleting a comment
+// Control: delete a comment
 const deleteComment = async (req, res) => {
   const { commentId } = req.params;
 

@@ -92,7 +92,7 @@ const deleteReview = async (req, res) => {
     const deletedReview = await reviewService.deleteReview(reviewId);
 
     // update average rating
-    await reviewService.updateAvgRating(itemId);
+    await reviewService.updateAvgRating(deletedReview.itemId);
 
     res.status(200).json(deletedReview);
   } catch (error) {

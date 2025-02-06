@@ -11,6 +11,9 @@ router.get("/me", protect, reviewController.getMyReviews);
 // PUT /api/reviews/:reviewId
 router.put("/:reviewId", protect, checkOwnership('Review', 'reviewId'), reviewController.updateReviewById);
 
+// DELETE /api/reviews/:reviewId
+router.delete("/:reviewId", protect, checkOwnership('Review', 'reviewId'), reviewController.deleteReview);
+
 
 // CREATE a review
 // router.post(

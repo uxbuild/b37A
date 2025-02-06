@@ -82,7 +82,7 @@ const updateComment = async (commentId, text) => {
 const deleteComment = async (commentId) => {
   try {
     return await prisma.comment.delete({
-      where: { id: commentId },
+      where: { id: Number(commentId) },
     });
   } catch (error) {
     throw new Error(error.message || 'Error deleting comment');

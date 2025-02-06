@@ -9,6 +9,8 @@ router.get('/me', protect, commentController.getMyComments);
 
 // PUT edit my comments..
 router.put("/:commentId", protect, checkOwnership('Comment', 'commentId'), commentController.updateComment);
+// DELETE edit my comments..
+router.delete("/:commentId", protect, checkOwnership('Comment', 'commentId'), commentController.deleteComment);
 
 
 module.exports = router;

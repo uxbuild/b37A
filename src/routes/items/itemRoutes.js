@@ -21,7 +21,7 @@ router.get('/:itemId/reviews/:reviewId/comments', itemController.getCommentsByRe
 // POST create a review for an item, PROTECTED
 router.post("/:itemId/reviews", protect, itemController.addReview);
 
-// POST post comment to an item's review.. PROTECTED
+// POST comment to an item's review.. PROTECTED
 router.post("/:itemId/reviews/:reviewId/comments", protect, itemController.addCommentByReviewId);
 
 

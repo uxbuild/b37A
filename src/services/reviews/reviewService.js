@@ -1,6 +1,5 @@
-
 // imports..
-const prisma = require('../../../prisma/prismaClient');
+const prisma = require("../../../prisma/prismaClient");
 
 // Create a new review for an item
 const createReview = async (userId, itemId, text, rating) => {
@@ -11,7 +10,7 @@ const createReview = async (userId, itemId, text, rating) => {
     });
 
     if (existingReview) {
-      throw new Error('You can only leave one review per item.');
+      throw new Error("You can only leave one review per item.");
     }
 
     // Create the review if it doesn't exist
@@ -24,7 +23,7 @@ const createReview = async (userId, itemId, text, rating) => {
       },
     });
   } catch (error) {
-    throw new Error(error.message || 'Error creating review');
+    throw new Error(error.message || "Error creating review");
   }
 };
 
@@ -34,12 +33,12 @@ const getReviewsByItem = async (itemId) => {
     return await prisma.review.findMany({
       where: { itemId },
       include: {
-        user: true,  // Include the user who created the review
+        user: true, // Include the user who created the review
         comments: true, // Include related comments (optional)
       },
     });
   } catch (error) {
-    throw new Error(error.message || 'Error fetching reviews for item');
+    throw new Error(error.message || "Error fetching reviews for item");
   }
 };
 
@@ -49,12 +48,12 @@ const getReviewById = async (reviewId) => {
     return await prisma.review.findUnique({
       where: { id: reviewId },
       include: {
-        user: true,   // Include the user who wrote the review
+        user: true, // Include the user who wrote the review
         comments: true, // Optionally include related comments
       },
     });
   } catch (error) {
-    throw new Error(error.message || 'Error fetching review by ID');
+    throw new Error(error.message || "Error fetching review by ID");
   }
 };
 
@@ -66,7 +65,7 @@ const updateReview = async (reviewId, text, rating) => {
       data: { text, rating },
     });
   } catch (error) {
-    throw new Error(error.message || 'Error updating review');
+    throw new Error(error.message || "Error updating review");
   }
 };
 
@@ -77,7 +76,7 @@ const deleteReview = async (reviewId) => {
       where: { id: reviewId },
     });
   } catch (error) {
-    throw new Error(error.message || 'Error deleting review');
+    throw new Error(error.message || "Error deleting review");
   }
 };
 
@@ -89,13 +88,40 @@ const updateAvgRating = async (itemId) => {
 
   // calculate new average rating
   const avgRating =
-    reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length || 0;
-    const rounded = Math.round(avgRating);
+    reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length ||
+    0;
+  const rounded = Math.round(avgRating);
   // update average rating
   return await prisma.item.update({
     where: { id: itemId },
     data: { rounded },
   });
+};
+
+// get all reviews by user id..
+const getReviewsByUserId = async (userId) => {
+  console.log('*****************');
+  console.log('review services getReviewsByUserId', userId);
+  
+  
+  try {
+    const reviews = await prisma.review.findMany({
+      where: { userId: userId }, // Filter reviews by userId
+      select: {
+        id: true,
+        text: true,
+        rating: true,
+        itemId: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return reviews;
+  } catch (error) {
+    throw new Error("Error retrieving reviews from database");
+  }
 };
 
 module.exports = {
@@ -105,5 +131,5 @@ module.exports = {
   updateReview,
   deleteReview,
   updateAvgRating,
-
+  getReviewsByUserId,
 };

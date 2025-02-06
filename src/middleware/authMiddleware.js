@@ -1,12 +1,11 @@
 // middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
 
-
-// Middleware to protect routes and ensure the user authenticated
+// middleware token authorization (login)..
 const protect = async (req, res, next) => {
-  console.log('*************');
-  console.log('protect req', req.headers);
-  
+  console.log("*************");
+  console.log("protect req", req.headers.authorization);
+
   let token;
 
   // Check for token
@@ -21,6 +20,7 @@ const protect = async (req, res, next) => {
       // Verify token,  attach user to request
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
+      console.log("decoded user", req.user);
 
       // proceed to next middleware..
       next();
@@ -32,12 +32,10 @@ const protect = async (req, res, next) => {
   if (!token) {
     res.status(401).json({ message: "Not authorized, no token" });
   }
- 
 };
 
 // Generalized ownership check for any model
 const checkOwnership = (model) => async (req, res, next) => {
-  
   // get user id
   const { userId } = req.user.id;
 

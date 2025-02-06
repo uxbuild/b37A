@@ -1,6 +1,8 @@
 // controllers/reviewController.js
 const reviewService = require("../../services/reviews/reviewService");
 
+
+// -----------------------------------------
 // Controller for creating a review
 const createReview = async (req, res) => {
   const { userId, itemId, text, rating } = req.body;
@@ -21,7 +23,7 @@ const createReview = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
+// -----------------------------------------
 // Controller for getting all reviews for an item
 const getReviewsByItem = async (req, res) => {
   const { itemId } = req.params;
@@ -34,6 +36,7 @@ const getReviewsByItem = async (req, res) => {
   }
 };
 
+// -----------------------------------------
 // Controller for getting a single review by ID
 const getReviewById = async (req, res) => {
   const { reviewId } = req.params;
@@ -49,6 +52,7 @@ const getReviewById = async (req, res) => {
   }
 };
 
+// -----------------------------------------
 // Controller for updating a review
 const updateReview = async (req, res) => {
   const { reviewId } = req.params;
@@ -70,6 +74,7 @@ const updateReview = async (req, res) => {
   }
 };
 
+// -----------------------------------------
 // Controller for deleting a review
 const deleteReview = async (req, res) => {
   const { reviewId } = req.params;
@@ -87,10 +92,30 @@ const deleteReview = async (req, res) => {
   }
 };
 
+// -----------------------------------------
+// get all my reviews..
+const getMyReviews = async (req, res) => {
+  console.log('***********************');
+  console.log('review controller getMyReviews', req.user.id);
+  
+  try {
+    const userId = req.user.userId;
+    const reviews = await reviewService.getReviewsByUserId(userId);
+    // if none found..
+    if (!reviews || reviews.length === 0) {
+      return res.status(404).json({ message: "No reviews found." });
+    }
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving reviews" });
+  }
+};
+
 module.exports = {
   createReview,
   getReviewsByItem,
   getReviewById,
   updateReview,
   deleteReview,
+  getMyReviews,
 };

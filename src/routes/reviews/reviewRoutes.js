@@ -9,7 +9,7 @@ const { protect, checkOwnership } = require("../../middleware/authMiddleware");
 router.get("/me", protect, reviewController.getMyReviews);
 
 // PUT /api/reviews/:reviewId
-router.put("/:id", protect, checkOwnership('review', 'userId'), reviewController.updateReviewById);
+router.put("/:reviewId", protect, checkOwnership('Review', 'reviewId'), reviewController.updateReviewById);
 
 
 // CREATE a review

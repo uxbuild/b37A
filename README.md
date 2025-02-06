@@ -16,10 +16,10 @@
 - GET items/id/reviews/id/comments
 - POST /api/items/:itemId/reviews
 - GET /api/reviews/me PROTECTED view my reviews
-- PUT /api/reviews/:reviewId PROTECTED = edit my review
 - POST /api/items/:itemId/reviews/:reviewId/comments PROTECTED
 - GET /api/comments/me PROTECTED = get my comments
 - PUT /api/comments/:commentId PROTECTED = edit my comment
+- PUT /api/reviews/:reviewId PROTECTED = edit my review
 
 # in progress
 

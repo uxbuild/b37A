@@ -59,7 +59,7 @@ const updateReviewById = async (req, res) => {
   console.log('review controller');
   
   // review id in request url..
-  const { id } = req.params;
+  const { reviewId } = req.params;
   // console.log('');
   
   // review data in request body..
@@ -67,7 +67,7 @@ const updateReviewById = async (req, res) => {
 
   try {
     const updatedReview = await reviewService.updateReviewById(
-      id,
+      reviewId,
       text,
       rating
     );

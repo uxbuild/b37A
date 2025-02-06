@@ -36,42 +36,39 @@ const protect = async (req, res, next) => {
   }
 };
 
-// looks for an id (resource) in the request path..
-const checkOwnership = (modelName, fieldName) => async (req, res, next) => {
-  console.log('*********');
-  console.log('checkOwnership', `${modelName}, ${fieldName}`);
-  
-  
+// generalized: checking authenticated user owns resource referenced in request..
+const checkOwnership = (model, paramName) => async (req, res, next) => {
+console.log('***********');
+console.log('middleware checkownership ', `model:${model}, param:${paramName}`);
+
+  // req.param ids might be different..
+  const resourceId = Number(req.params[paramName]);
+  // get user id from middleware updated request..
+  const userId = req.user.userId;
+
+  if (!resourceId) {
+    return res.status(400).json({ message: 'Invalid resource ID' });
+  }
+
   try {
-    const { userId } = req.user;  // Get authenticated user's ID from the token
-    console.log('userId', userId);
-    
-    const { id } = req.params;     // Get the resource ID (from the route params)
-    console.log('req id', id);
-    
-    // Dynamically fetch the model using the modelName and check ownership
-    const resource = await prisma[modelName].findUnique({
-      where: { id: Number(id) },  // Find the resource by its ID
+    // get resource..
+    const resource = await prisma[model].findUnique({
+      where: { id: resourceId },
     });
-
+    // check resource..
     if (!resource) {
-      return res.status(404).json({ message: `${modelName} not found` });
+      return res.status(404).json({ message: 'Resource not found' });
     }
-
-    // check authenticated user is owner (match userId with fieldName)
-    if (resource[fieldName] !== userId) {
-      return res.status(403).json({ message: 'You do not have permission to access this resource.' });
+    // check ownership..
+    if (resource.userId !== userId) {
+      return res.status(403).json({ message: 'Not authorized' });
     }
-
-    // proceed to next middleware..
-    console.log('proceed with ownership..');
-    
+    // pass to next middleware..
     next();
-
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error checking ownership' });
+    res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 module.exports = { protect, checkOwnership };

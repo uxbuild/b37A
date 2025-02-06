@@ -8,7 +8,7 @@ const { protect, checkOwnership } = require('../../middleware/authMiddleware');
 router.get('/me', protect, commentController.getMyComments);
 
 // PUT edit my comments..
-router.put("/:commentId", protect, checkOwnership(), commentController.updateComment);
+router.put("/:commentId", protect, checkOwnership('Comment', 'commentId'), commentController.updateComment);
 
 
 module.exports = router;

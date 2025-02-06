@@ -65,9 +65,12 @@ const getCommentsByUser = async (userId) => {
 
 // Update an existing comment
 const updateComment = async (commentId, text) => {
+  console.log('*************');
+  console.log('commnet service ', `commentId:${commentId}, text:${text}`);
+  
   try {
     return await prisma.comment.update({
-      where: { id: commentId },
+      where: { id: Number(commentId) },
       data: { text },
     });
   } catch (error) {

@@ -21,10 +21,10 @@
 - PUT /api/comments/:commentId PROTECTED = edit my comment
 - PUT /api/reviews/:reviewId PROTECTED = edit my review
 - DELETE /api/reviews/:reviewId PROTECTED = delete my review
+- DELETE /api/comments/:commentId PROTECTED = delete my comment
 
 # in progress
 
-- DELETE /api/comments/:commentId PROTECTED = delete my comment
 
 # tasks TODO:
 

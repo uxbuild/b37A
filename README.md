@@ -20,14 +20,14 @@
 - GET /api/comments/me PROTECTED = get my comments
 - PUT /api/comments/:commentId PROTECTED = edit my comment
 - PUT /api/reviews/:reviewId PROTECTED = edit my review
+- DELETE /api/reviews/:reviewId PROTECTED = delete my review
 
 # in progress
 
-- DELETE /api/users/:userId/comments/:commentId PROTECTED = delete my comment
+- DELETE /api/comments/:commentId PROTECTED = delete my comment
 
 # tasks TODO:
 
-- DELETE /api/users/:userId/reviews/:reviewId PROTECTED = delete my review
 
 # data structure
 

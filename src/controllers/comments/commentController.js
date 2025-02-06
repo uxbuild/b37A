@@ -62,7 +62,11 @@ const deleteComment = async (req, res) => {
 
   try {
     const deletedComment = await commentService.deleteComment(commentId);
-    res.status(200).json(deletedComment);
+    // res.status(200).json(deletedComment);
+    res.status(200).json({
+      message: "Comment deleted successfuly.",
+      deletedComment,
+    })
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

@@ -7,9 +7,10 @@ const { protect, checkOwnership } = require('../../middleware/authMiddleware');
 // Get my comments..
 router.get('/me', protect, commentController.getMyComments);
 
-// PUT edit my comments..
+// PUT edit my comment..
 router.put("/:commentId", protect, checkOwnership('Comment', 'commentId'), commentController.updateComment);
-// DELETE edit my comments..
+
+// DELETE my comment..
 router.delete("/:commentId", protect, checkOwnership('Comment', 'commentId'), commentController.deleteComment);
 
 

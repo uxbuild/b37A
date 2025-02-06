@@ -1,7 +1,6 @@
 // controllers/reviewController.js
 const reviewService = require("../../services/reviews/reviewService");
 
-
 // -----------------------------------------
 // Controller for creating a review
 const createReview = async (req, res) => {
@@ -54,18 +53,27 @@ const getReviewById = async (req, res) => {
 
 // -----------------------------------------
 // Controller for updating a review
-const updateReview = async (req, res) => {
-  const { reviewId } = req.params;
+const updateReviewById = async (req, res) => {
+  console.log('****************');
+  
+  console.log('review controller');
+  
+  // review id in request url..
+  const { id } = req.params;
+  // console.log('');
+  
+  // review data in request body..
   const { text, rating } = req.body;
 
   try {
-    const updatedReview = await reviewService.updateReview(
-      reviewId,
+    const updatedReview = await reviewService.updateReviewById(
+      id,
       text,
       rating
     );
 
-    // update average rating
+    // get itemId from review, update average rating.
+    const { itemId } = updatedReview;
     await reviewService.updateAvgRating(itemId);
 
     res.status(200).json(updatedReview);
@@ -95,9 +103,9 @@ const deleteReview = async (req, res) => {
 // -----------------------------------------
 // get all my reviews..
 const getMyReviews = async (req, res) => {
-  console.log('***********************');
-  console.log('review controller getMyReviews', req.user.id);
-  
+  console.log("***********************");
+  console.log("review controller getMyReviews", req.user.id);
+
   try {
     const userId = req.user.userId;
     const reviews = await reviewService.getReviewsByUserId(userId);
@@ -115,7 +123,7 @@ module.exports = {
   createReview,
   getReviewsByItem,
   getReviewById,
-  updateReview,
+  updateReviewById,
   deleteReview,
   getMyReviews,
 };

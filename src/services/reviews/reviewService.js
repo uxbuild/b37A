@@ -1,6 +1,7 @@
 // imports..
 const prisma = require("../../../prisma/prismaClient");
 
+// -----------------------------------
 // Create a new review for an item
 const createReview = async (userId, itemId, text, rating) => {
   try {
@@ -14,7 +15,7 @@ const createReview = async (userId, itemId, text, rating) => {
     }
 
     // Create the review if it doesn't exist
-    return await prisma.review.create({
+    const created = await prisma.review.create({
       data: {
         text,
         rating,
@@ -22,11 +23,15 @@ const createReview = async (userId, itemId, text, rating) => {
         userId,
       },
     });
+    // update item avg rating..
+    await updateAvgRating(updated.itemId);
+    return created;
   } catch (error) {
     throw new Error(error.message || "Error creating review");
   }
 };
 
+// -----------------------------------
 // Get all reviews for a specific item
 const getReviewsByItem = async (itemId) => {
   try {
@@ -42,6 +47,7 @@ const getReviewsByItem = async (itemId) => {
   }
 };
 
+// -----------------------------------
 // Get a review by its ID
 const getReviewById = async (reviewId) => {
   try {
@@ -57,53 +63,68 @@ const getReviewById = async (reviewId) => {
   }
 };
 
-// Update a review's text or rating
-const updateReview = async (reviewId, text, rating) => {
+// -----------------------------------
+// Update a review's text and rating
+const updateReviewById = async (reviewId, text, rating) => {
+  console.log("*************");
+  console.log("updateReview", `${reviewId}, ${text}, ${rating}`);
+
+  //const rating = Number(rating);
   try {
-    return await prisma.review.update({
-      where: { id: reviewId },
-      data: { text, rating },
+    const updated = await prisma.review.update({
+      where: { id: Number(reviewId) },
+      data: { text, rating: Number(rating) },
     });
+    // update item avg rating..
+    await updateAvgRating(updated.itemId);
+    // return updated review..
+    return updated;
   } catch (error) {
     throw new Error(error.message || "Error updating review");
   }
 };
 
+// -----------------------------------
 // delete review
 const deleteReview = async (reviewId) => {
   try {
-    return await prisma.review.delete({
+    const deleted = await prisma.review.delete({
       where: { id: reviewId },
     });
+    // update item avg rating..
+    await updateAvgRating(deleted.itemId);
+    return deleted;
   } catch (error) {
     throw new Error(error.message || "Error deleting review");
   }
 };
 
+// -----------------------------------
+// updateAvgRating
 const updateAvgRating = async (itemId) => {
   // get all reviews
   const reviews = await prisma.review.findMany({
     where: { itemId },
   });
 
-  // calculate new average rating
   const avgRating =
     reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length ||
     0;
   const rounded = Math.round(avgRating);
   // update average rating
-  return await prisma.item.update({
-    where: { id: itemId },
-    data: { rounded },
+  const updated = await prisma.item.update({
+    where: { id: Number(itemId) },
+    data: { avgRating: rounded }
   });
+  return updated;
 };
 
+// -----------------------------------
 // get all reviews by user id..
 const getReviewsByUserId = async (userId) => {
-  console.log('*****************');
-  console.log('review services getReviewsByUserId', userId);
-  
-  
+  console.log("*****************");
+  console.log("review services getReviewsByUserId", userId);
+
   try {
     const reviews = await prisma.review.findMany({
       where: { userId: userId }, // Filter reviews by userId
@@ -128,7 +149,7 @@ module.exports = {
   createReview,
   getReviewsByItem,
   getReviewById,
-  updateReview,
+  updateReviewById,
   deleteReview,
   updateAvgRating,
   getReviewsByUserId,

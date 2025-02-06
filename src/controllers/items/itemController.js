@@ -80,6 +80,30 @@ const addReview = async (req, res) => {
   }
 };
 
+// -----------------------
+// POST add comment by review id
+// Controller to add a comment to a review
+const addCommentByReviewId = async (req, res) => {
+  const { itemId, reviewId } = req.params;
+  const { text } = req.body;  // Comment's text
+  const userId = req.user.userId; // Extracted from the token by the protect middleware
+  
+  try {
+    // Call the service to add the comment
+    const comment = await itemService.addCommentByReviewId(itemId, reviewId, userId, text);
+    
+    // Return the added comment as the response
+    res.status(201).json({
+      message: 'Comment added successfully',
+      comment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || 'Error adding comment',
+    });
+  }
+};
+
 module.exports = {
   getAllItems,
   getItemById,
@@ -87,4 +111,5 @@ module.exports = {
   getItemReviewById,
   getCommentsByReviewId,
   addReview,
+  addCommentByReviewId,
 };

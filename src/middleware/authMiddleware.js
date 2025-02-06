@@ -1,12 +1,13 @@
 // middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
+// prisma client..
+const prisma = require('../../prisma/prismaClient');
 
-
-// Middleware to protect routes and ensure the user authenticated
+// middleware token authorization (login)..
 const protect = async (req, res, next) => {
-  console.log('*************');
-  console.log('protect req', req.headers);
-  
+  console.log("*************");
+  console.log("protect req", req.headers.authorization);
+
   let token;
 
   // Check for token
@@ -21,6 +22,7 @@ const protect = async (req, res, next) => {
       // Verify token,  attach user to request
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decoded;
+      console.log("decoded user", req.user);
 
       // proceed to next middleware..
       next();
@@ -32,28 +34,41 @@ const protect = async (req, res, next) => {
   if (!token) {
     res.status(401).json({ message: "Not authorized, no token" });
   }
- 
 };
 
-// Generalized ownership check for any model
-const checkOwnership = (model) => async (req, res, next) => {
-  
-  // get user id
-  const { userId } = req.user.id;
+// generalized: checking authenticated user owns resource referenced in request..
+const checkOwnership = (model, paramName) => async (req, res, next) => {
+console.log('***********');
+console.log('middleware checkownership ', `model:${model}, param:${paramName}`);
 
-  // Find model instance by unique ID (e.g., reviewId, commentId)
-  const item = await model.findUnique({
-    where: { id: req.params[`${model.name.toLowerCase()}Id`] }, // Get model instance based on the dynamic ID param
-  });
+  // req.param ids might be different..
+  const resourceId = Number(req.params[paramName]);
+  // get user id from middleware updated request..
+  const userId = req.user.userId;
 
-  if (!item || item.userId !== userId) {
-    return res
-      .status(403)
-      .json({ message: "You are not authorized to perform this action" });
+  if (!resourceId) {
+    return res.status(400).json({ message: 'Invalid resource ID' });
   }
 
-  // proceed to next middleware..
-  next();
+  try {
+    // get resource..
+    const resource = await prisma[model].findUnique({
+      where: { id: resourceId },
+    });
+    // check resource..
+    if (!resource) {
+      return res.status(404).json({ message: 'Resource not found' });
+    }
+    // check ownership..
+    if (resource.userId !== userId) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+    // pass to next middleware..
+    next();
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 };
+
 
 module.exports = { protect, checkOwnership };

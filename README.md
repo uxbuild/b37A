@@ -15,19 +15,19 @@
 - GET items/id/reviews/id
 - GET items/id/reviews/id/comments
 - POST /api/items/:itemId/reviews
+- GET /api/reviews/me PROTECTED view my reviews
+- POST /api/items/:itemId/reviews/:reviewId/comments PROTECTED
+- GET /api/comments/me PROTECTED = get my comments
+- PUT /api/comments/:commentId PROTECTED = edit my comment
+- PUT /api/reviews/:reviewId PROTECTED = edit my review
+- DELETE /api/reviews/:reviewId PROTECTED = delete my review
 
 # in progress
 
-- GET /api/reviews/me PROTECTED = view my reviews
+- DELETE /api/comments/:commentId PROTECTED = delete my comment
 
 # tasks TODO:
 
-- PUT /api/users/:userId/reviews/:reviewId PROTECTED = edit my review
-- POST /api/items/:itemId/reviews/:reviewId/comments
-- GET /api/comments/me PROTECTED = get my comments
-- PUT /api/users/:userId/comments/:commentId PROTECTED = edit my comment
-- DELETE /api/users/:userId/comments/:commentId PROTECTED = delete my comment
-- DELETE /api/users/:userId/reviews/:reviewId PROTECTED = delete my review
 
 # data structure
 

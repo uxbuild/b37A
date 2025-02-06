@@ -18,9 +18,11 @@ router.get("/:itemId/reviews/:reviewId", itemController.getItemReviewById);
 // GET all comments of item review by id
 router.get('/:itemId/reviews/:reviewId/comments', itemController.getCommentsByReviewId);
 
-// POST create a review for an item
+// POST create a review for an item, PROTECTED
 router.post("/:itemId/reviews", protect, itemController.addReview);
 
+// POST comment to an item's review.. PROTECTED
+router.post("/:itemId/reviews/:reviewId/comments", protect, itemController.addCommentByReviewId);
 
 
 module.exports = router;

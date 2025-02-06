@@ -17,14 +17,14 @@
 - POST /api/items/:itemId/reviews
 - GET /api/reviews/me PROTECTED view my reviews
 - PUT /api/reviews/:reviewId PROTECTED = edit my review
+- POST /api/items/:itemId/reviews/:reviewId/comments PROTECTED
 
 # in progress
 
-- POST /api/items/:itemId/reviews/:reviewId/comments PROTECTED
+- GET /api/comments/me PROTECTED = get my comments
 
 # tasks TODO:
 
-- GET /api/comments/me PROTECTED = get my comments
 - PUT /api/users/:userId/comments/:commentId PROTECTED = edit my comment
 - DELETE /api/users/:userId/comments/:commentId PROTECTED = delete my comment
 - DELETE /api/users/:userId/reviews/:reviewId PROTECTED = delete my review

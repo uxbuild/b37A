@@ -36,7 +36,7 @@ const protect = async (req, res, next) => {
   }
 };
 
-// looks for an id in the request path..
+// looks for an id (resource) in the request path..
 const checkOwnership = (modelName, fieldName) => async (req, res, next) => {
   console.log('*********');
   console.log('checkOwnership', `${modelName}, ${fieldName}`);

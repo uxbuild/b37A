@@ -45,10 +45,18 @@ const getCommentsByUser = async (userId) => {
   try {
     return await prisma.comment.findMany({
       where: { userId },
-      include: {
-        review: true,  // Include the review the comment is associated with
-        user: true,    // Include the user who made the comment
-      },
+      select: {
+        id: true,
+        text: true,
+        userId: true,
+        createdAt: true,
+        updatedAt: true,
+      }
+      // dont want to expand the tables..
+      // include: {
+      //   review: true,  // Include the review the comment is associated with
+      //   user: true,    // Include the user who made the comment
+      // },
     });
   } catch (error) {
     throw new Error(error.message || 'Error fetching user comments');
@@ -78,10 +86,37 @@ const deleteComment = async (commentId) => {
   }
 };
 
+// service: get my comments..
+const getMyComments = async (userId) => {
+  try {
+    // Retrieve all comments made by the user
+    const comments = await prisma.comment.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        text: true,
+        createdAt: true,
+        updatedAt: true,
+        reviewId: true,  // Assuming comments are tied to a review
+        // You can include other fields as needed
+      },
+    });
+
+    if (!comments) {
+      throw new Error('No comments found for this user.');
+    }
+
+    return comments;
+  } catch (error) {
+    throw new Error(error.message || 'Error retrieving comments.');
+  }
+};
+
 module.exports = {
   createComment,
   getCommentsByReview,
   getCommentsByUser,
   updateComment,
-  deleteComment
+  deleteComment,
+  getMyComments,
 };

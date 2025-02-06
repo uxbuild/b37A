@@ -63,10 +63,24 @@ const deleteComment = async (req, res) => {
   }
 };
 
+// Controller: get my comments..
+const getMyComments = async (req, res) => {
+  const userId = req.user.userId;  // Getting the userId from the request object (set by the protect middleware)
+
+  try {
+    const comments = await commentService.getCommentsByUser(userId);
+    res.status(200).json({ comments });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Error retrieving comments.' });
+  }
+};
+
+
 module.exports = {
   createComment,
   getCommentsByReview,
   getCommentsByUser,
   updateComment,
   deleteComment,
+  getMyComments,
 };

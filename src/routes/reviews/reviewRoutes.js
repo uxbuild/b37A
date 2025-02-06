@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 const reviewController = require("../../controllers/reviews/reviewController");
 const { protect, checkOwnership } = require("../../middleware/authMiddleware");
-const { Review } = require("@prisma/client");
 
 
 // GET /api/reviews/me
@@ -11,6 +10,7 @@ router.get("/me", protect, reviewController.getMyReviews);
 
 // PUT /api/reviews/:reviewId
 router.put("/:id", protect, checkOwnership('review', 'userId'), reviewController.updateReviewById);
+
 
 // CREATE a review
 // router.post(

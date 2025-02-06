@@ -198,6 +198,38 @@ const addReview = async (itemId, text, rating, userId) => {
     throw new Error("Error adding review: " + error.message);
   }
 };
+
+// POST add comment by review id
+const addCommentToReview = async (itemId, reviewId, userId, text) => {
+  // check review exists for the item..
+  const review = await prisma.review.findUnique({
+    where: { id: Number(reviewId) },
+    include: {
+      item: true, // Include item to ensure it's related
+    },
+  });
+
+  if (!review) {
+    throw new Error('Review not found');
+  }
+
+  // check review belongs to item..
+  if (review.itemId !== Number(itemId)) {
+    throw new Error('Review does not belong to this item');
+  }
+
+  // Create new comment for review..
+  const comment = await prisma.comment.create({
+    data: {
+      text,
+      reviewId: Number(reviewId),
+      userId: Number(userId),
+    },
+  });
+
+  return comment;
+};
+
 // ----------------
 // Helper function to calculate the average rating
 const getAvgRating = async (itemId) => {

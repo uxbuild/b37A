@@ -1,5 +1,6 @@
 // imports..
 const prisma = require("../../../prisma/prismaClient");
+// const { addCommentByReviewId } = require("../../controllers/items/itemController");
 
 // --------------------------
 // Get all items..
@@ -200,8 +201,15 @@ const addReview = async (itemId, text, rating, userId) => {
 };
 
 // POST add comment by review id
-const addCommentToReview = async (itemId, reviewId, userId, text) => {
-  // check review exists for the item..
+const addCommentByReviewId = async (itemId, reviewId, userId, text) => {
+  console.log('************');
+  console.log('item service add comment by id');
+  console.log(`itemId:${itemId}, reviewId:${reviewId}, userId:${userId}, text:${text}`);
+  
+  
+  
+  // const { itemId, reviewId, userId, text} = args;
+  // find review ..
   const review = await prisma.review.findUnique({
     where: { id: Number(reviewId) },
     include: {
@@ -218,7 +226,7 @@ const addCommentToReview = async (itemId, reviewId, userId, text) => {
     throw new Error('Review does not belong to this item');
   }
 
-  // Create new comment for review..
+  // set new comment for review..
   const comment = await prisma.comment.create({
     data: {
       text,
@@ -253,4 +261,5 @@ module.exports = {
   getItemReviewById,
   getCommentsByReviewId,
   addReview,
+  addCommentByReviewId,
 };

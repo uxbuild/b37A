@@ -86,11 +86,11 @@ const addReview = async (req, res) => {
 const addCommentByReviewId = async (req, res) => {
   const { itemId, reviewId } = req.params;
   const { text } = req.body;  // Comment's text
-  const userId = req.user.id; // Extracted from the token by the protect middleware
+  const userId = req.user.userId; // Extracted from the token by the protect middleware
   
   try {
     // Call the service to add the comment
-    const comment = await reviewService.addCommentByReviewId(itemId, reviewId, userId, text);
+    const comment = await itemService.addCommentByReviewId(itemId, reviewId, userId, text);
     
     // Return the added comment as the response
     res.status(201).json({
